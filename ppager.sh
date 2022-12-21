@@ -2,22 +2,28 @@
 
 if [ -z "$1" ]; then
 	TTY=`tty`
-	TEMPFILE=ppager_${TTY##*/}
+	TEMPFILE=/tmp/ppager_${TTY##*/}
 else
-	TEMPFILE=$1
+	TEMPFILE=/tmp/$1
 fi
 
-echo '(PID=`cat /tmp/'$TEMPFILE'.pid`; rm -f /tmp/'$TEMPFILE'.pid; kill $PID; cat>/tmp/'$TEMPFILE'.fifo)' >/tmp/$TEMPFILE
-chmod +x /tmp/$TEMPFILE
-
-mkfifo /tmp/$TEMPFILE.fifo
-echo "export PAGER=/tmp/$TEMPFILE" >/tmp/$TEMPFILE.fifo &
+st() { STARTED=1; echo "export PAGER=$TEMPFILE" >$TEMPFILE.fifo & }
+dt() { rm -f $TEMPFILE $TEMPFILE.fifo $TEMPFILE.pid; }
+dt
+echo '(PID=`cat '$TEMPFILE'.pid`; rm -f '$TEMPFILE'.pid; kill $PID; cat>'$TEMPFILE'.fifo; exit 0)' >$TEMPFILE
+chmod +x $TEMPFILE
+mkfifo $TEMPFILE.fifo
+st
 while true; do 
-	cat /tmp/$TEMPFILE.fifo|less -R &
+	cat $TEMPFILE.fifo|less -R &
 	PID=$!
-	echo $PID >/tmp/$TEMPFILE.pid
+	echo $PID >$TEMPFILE.pid
 	wait $PID
-	[ -f /tmp/$TEMPFILE.pid ] && break
+	if [ -f $TEMPFILE.pid ]; then
+		[ -n "$STARTED" ] && break
+		st
+	else
+		unset STARTED
+	fi
 done
-
-rm -f /tmp/$TEMPFILE /tmp/$TEMPFILE.fifo /tmp/$TEMPFILE.pid
+dt

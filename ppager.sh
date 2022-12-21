@@ -10,7 +10,7 @@ fi
 st() { STARTED=1; echo "export PAGER=$TEMPFILE" >$TEMPFILE.fifo & }
 dt() { rm -f $TEMPFILE $TEMPFILE.fifo $TEMPFILE.pid; }
 dt
-echo '(PID=`cat '$TEMPFILE'.pid`; rm -f '$TEMPFILE'.pid; kill $PID; touch '$TEMPFILE'.fifo; cat>'$TEMPFILE'.fifo; exit 0)' >$TEMPFILE
+echo '(PID=`cat '$TEMPFILE'.pid`; rm -f '$TEMPFILE'.pid; kill $PID; while [ ! -f '$TEMPFILE'.pid ]; do sleep 0.01; done; cat>'$TEMPFILE'.fifo; exit 0)' >$TEMPFILE
 chmod +x $TEMPFILE
 mkfifo $TEMPFILE.fifo
 st

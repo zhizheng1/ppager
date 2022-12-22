@@ -10,8 +10,7 @@ fi
 rm -f $TEMPFILE $TEMPFILE.fifo $TEMPFILE.pid $TEMPFILE.lock
 echo 'kill `cat '$TEMPFILE'.pid`; echo>'$TEMPFILE'.lock; cat>'$TEMPFILE'.fifo; EC=$?; [ $EC = 141 ] && EC=0; exit $EC' >$TEMPFILE
 chmod +x $TEMPFILE
-mkfifo $TEMPFILE.fifo
-mkfifo $TEMPFILE.lock
+mkfifo $TEMPFILE.fifo $TEMPFILE.lock
 START=1
 while true; do 
   [ -n "$START" ] && echo "export PAGER=$TEMPFILE" >$TEMPFILE.fifo &

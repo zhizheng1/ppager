@@ -5,9 +5,6 @@
 
 [ -z "$1" ] && { echo [FSWATCH_REMOTE=user@host] `basename $0` "<dir> [<vol_dir>]"; exit; }
 
-VOLDIR=$1
-[ -n "$2" ] && VOLDIR=$2
-
 if [ -z "$FSWATCH_REMOTE" ]; then
   cmd="~/Applications/Utilities/fswatch --monitor=fsevents_monitor --event=AttributeModified --event=Renamed $1"
 else

@@ -1,0 +1,14 @@
+[cpdf]
+https://community.coherentpdf.com
+
+~/Applications/Utilities/cpdf -page-info a1.pdf
+~/Applications/Utilities/cpdf -crop "x1 y1 w h" a.pdf odd -stdout|~/Applications/Utilities/cpdf -crop "x2 y2 w h" -stdin even -stdout|~/Applications/Utilities/cpdf -scale-page "r r" -stdin 1 -stdout|~/Applications/Utilities/cpdf -remove-crop -stdin 1 -o a1.pdf
+
+[qpdf]
+https://github.com/qpdf/qpdf
+https://formulae.brew.sh/api/bottle/qpdf.json
+
+~/Applications/Utilities/qpdf/bin/qpdf --linearize a.pdf a1.pdf
+
+[pandoc]
+https://pandoc.org/installing.html

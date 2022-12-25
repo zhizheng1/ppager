@@ -8,8 +8,12 @@
 VOLDIR=$1
 [ -n "$2" ] && VOLDIR=$2
 
-cmd="~/Applications/Utilities/fswatch $1"
-[ -n "$FSWATCH_REMOTE" ] && cmd="ssh $FSWATCH_REMOTE "'"'$cmd'  --event=Updated"'
+if [ -z "$FSWATCH_REMOTE" ]; then
+  cmd="~/Applications/Utilities/fswatch --monitor=fsevents_monitor --event=AttributeModified --event=Renamed $1"
+else
+  cmd="ssh $FSWATCH_REMOTE "'"~/Applications/Utilities/fswatch --monitor=inotify_monitor --event=Updated '$1'"'
+fi
+
 sh -c "$cmd"|while read i; do
   [ -n "$2" ] && i=`echo $i|sed "s|$1|$2|g"`
   i=`echo $i|sed "s| |%20|g"`

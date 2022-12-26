@@ -1,4 +1,5 @@
 [nginx]
+https://nginx.org/en/download.html
 https://nginx.org/packages/ubuntu/pool/nginx/n/nginx/
 
 pcre2 openssl@3

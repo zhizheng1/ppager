@@ -12,6 +12,8 @@ p(){ l=(); for f in $~1; do [ ! -L $f ] && otool -L $f|sed 1,`otool -D $f|awk 'E
 p nginx @@ @executable_path/lib
 p "lib/*" @@ @loader_path
 
+--with-cc-opt='-g -O2 -flto=auto -ffat-lto-objects -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC' --with-ld-opt='-Wl,-Bsymbolic-functions -flto=auto -ffat-lto-objects -Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie'
+
 user user;
 events {}
 http{

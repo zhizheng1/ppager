@@ -1,5 +1,5 @@
 [nginx]
-https://nginx.org/packages/mainline/ubuntu/pool/nginx/n/nginx/
+https://nginx.org/packages/ubuntu/pool/nginx/n/nginx/
 https://formulae.brew.sh/api/bottle/nginx.json
 
 user user;

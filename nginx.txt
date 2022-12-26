@@ -12,6 +12,12 @@ p(){ l=(); for f in $~1; do [ ! -L $f ] && otool -L $f|sed 1,`otool -D $f|awk 'E
 p nginx @@ @executable_path/lib
 p "lib/*" @@ @loader_path
 
+sudo ~/Applications/Utilities/nginx -p ~/Applications/Utilities/nginx_files
+conf/nginx.conf
+
+echo -n "user:" >~/.htpasswd      
+openssl passwd -apr1 >>~/.htpasswd 
+
 user user;
 events {}
 http{
@@ -19,6 +25,8 @@ server{
   listen 80;
   root /home/user;
   location /{
+    auth_basic "Restricted";
+    auth_basic_user_file /home/user/.htpasswd;
     autoindex on;
   }
 } }

@@ -8,8 +8,10 @@ p(){ l=(); for f in $~1; do [ ! -L $f ] && otool -L $f|sed 1,`otool -D $f|awk 'E
 p ttyd @@ @executable_path/lib
 p "lib/*" @@ @loader_path
 
+curl "http://localhost:7681"|sed -e 's|n\.isSafari|false|g' -e 's|f0f0f0|e0e0e0|g' >ttyd.index
+
 # https://xtermjs.org/docs/api/terminal/interfaces/itheme/
-(~/Applications/Utilities/ttyd -t 'fontSize=11' -t 'theme={"foreground":"#000000","background":"#ffffff","cursor":"#7f7f7f","selectionBackground":"#a5cdff","selectionInactiveBackground":"#e0e0e0","black":"#000000","red":"#990000","green":"#00a600","yellow":"#999900","blue":"#0000b2","magenta":"#b200b2","cyan":"#00a6b2","white":"#bfbfbf","brightBlack":"#666666","brightRed":"#e50000","brightGreen":"#00d900","brightYellow":"#e5e500","brightBlue":"#0000ff","#brightMagenta":"#e500e5","brightCyan":"#00e5e5","brightWhite":"#e5e5e5"}' -i lo /bin/zsh >/dev/null &)
+(~/Applications/Utilities/ttyd -t 'fontSize=11' -t 'theme={"foreground":"#000000","background":"#ffffff","cursor":"#7f7f7f","selectionBackground":"#a5cdff","selectionInactiveBackground":"#e0e0e0","black":"#000000","red":"#990000","green":"#00a600","yellow":"#999900","blue":"#0000b2","magenta":"#b200b2","cyan":"#00a6b2","white":"#bfbfbf","brightBlack":"#666666","brightRed":"#e50000","brightGreen":"#00d900","brightYellow":"#e5e500","brightBlue":"#0000ff","#brightMagenta":"#e500e5","brightCyan":"#00e5e5","brightWhite":"#e5e5e5"}' -i lo -I ~/Applications/Utilities/ttyd.index /bin/zsh >/dev/null &)
 
 # nginx
   location ~ ^/ttyd(.*)$ {

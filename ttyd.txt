@@ -1,0 +1,30 @@
+[ttyd]
+https://github.com/tsl0922/ttyd
+
+curl -L "https://formulae.brew.sh/api/bottle/ttyd.json"|sed -e 's|"ventura":{"url":"|\n|g' -e 's|"},"monterey":|\n|g'|grep ^http|while read i; do curl -H 'Authorization: Bearer QQ==' -L "$i" >a; tar zxvf a; done
+cd ttyd/*/bin; mkdir lib; cp -R ~/Desktop/**/libwebsockets-evlib_*.dylib lib
+for f in `otool -L ttyd lib/*|grep @@|awk '{print $1}'`; do cp -n ~/Desktop/**/${f##*/} lib; done
+p(){ l=(); for f in $~1; do [ ! -L $f ] && otool -L $f|sed 1,`otool -D $f|awk 'END{print NR}'`d|grep "$2"|awk '{print $1}'|while read i;do j=$3/${i##*/}; echo $f $i $j; install_name_tool -change $i $j $f; l+=($f); done; done; codesign -f -s - ${(u)l} }
+p ttyd @@ @executable_path/lib
+p "lib/*" @@ @loader_path
+
+# https://xtermjs.org/docs/api/terminal/interfaces/itheme/
+(~/Applications/Utilities/ttyd -t 'fontSize=11' -t rendererType=webgl -t 'theme={"foreground":"#000000","background":"#ffffff","selectionBackground":"#4080ff","selectionInactiveBackground":"#808080","black":"#000000","red":"#990000","green":"#00a600","yellow":"#999900","blue":"#0000b2","magenta":"#b200b2","cyan":"#00a6b2","white":"#bfbfbf","brightBlack":"#666666","brightRed":"#e50000","brightGreen":"#00d900","brightYellow":"#e5e500","brightBlue":"#0000ff","#brightMagenta":"#e500e5","brightCyan":"#00e5e5","brightWhite":"#e5e5e5"}' -i lo /bin/zsh >/dev/null &)
+
+# nginx
+  location ~ ^/ttyd(.*)$ {
+    auth_basic "Restricted";
+    auth_basic_user_file /home/user/.htpasswd;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_pass http://127.0.0.1:7681/$1;
+}
+
+[libsixel]
+https://github.com/libsixel/libsixel
+https://packages.ubuntu.com/km/jammy/libsixel-bin
+https://formulae.brew.sh/api/bottle/libsixel.json

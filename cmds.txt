@@ -1,0 +1,5 @@
+rsync -var --delete --progress src dest
+
+echo 'tell application "Safari"
+set bounds of front window to {0,0,1280,960}          
+end tell'|osascript

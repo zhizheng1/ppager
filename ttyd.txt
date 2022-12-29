@@ -1,13 +1,16 @@
 [ttyd]
 https://github.com/tsl0922/ttyd
+https://github.com/warmcat/libwebsockets
 
-curl -L "https://formulae.brew.sh/api/bottle/ttyd.json"|sed -e 's|"ventura":{"url":"|\n|g' -e 's|"},"monterey":|\n|g'|grep ^http|while read i; do curl -H 'Authorization: Bearer QQ==' -L "$i" >a; tar zxvf a; done
-mkdir include lib; mv */*/include/* include; mv */*/lib/*.dylib lib; mv include/json-c/* include
-clang -isysroot ~/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I$HOME/Desktop/include  -L$HOME/Desktop/lib src/utils.c src/pty.c src/protocol.c src/http.c src/server.c  -luv -lwebsockets -ljson-c -lcrypto -lz -lssl -o ttyd
-mkdir lib; cp ~/Desktop/lib/libwebsockets-evlib_* lib;
-otool -L ttyd lib/*|grep @|awk '{print $1}'|while read i; do cp -n ~/Desktop/lib/${i##*/} lib; done
+for a in openssl@3 libevent libuv cmake json-c; do curl -L "https://formulae.brew.sh/api/bottle/$a.json"|sed -e 's|"ventura":{"url":"|\n|g' -e 's|"},"monterey":|\n|g'|grep ^http|while read i; do curl -H 'Authorization: Bearer QQ==' -L "$i" >a; tar zxvf a; done; done
+cd libwebsockets-*
+~/Desktop/cmake/*/bin/cmake . -DOPENSSL_ROOT_DIR=`echo ~/Desktop/openssl@3/*` -DLWS_WITH_LIBEVENT=YES -DLWS_WITH_LIBUV=YES -DLWS_WITH_EVLIB_PLUGINS=OFF -DLIBEVENT_INCLUDE_DIRS=`echo ~/Desktop/libevent/*/include` -DLIBUV_INCLUDE_DIRS=`echo ~/Desktop/libuv/*/include` -DLIBEVENT_LIBRARIES=`echo ~/Desktop/libevent/*/lib/libevent-*.dylib` -DLIBUV_LIBRARIES=`echo ~/Desktop/libuv/*/lib/libuv.*.dylib`
+cd ../ttyd-*
+clang -isysroot ~/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -I`echo ~/Desktop/libwebsockets-*/include` -I`echo ~/Desktop/openssl@3/*/include` -I`echo ~/Desktop/json-c/*/include/json-c` -I`echo ~/Desktop/libuv/*/include` -L`echo ~/Desktop/libwebsockets-*/lib` -L`echo ~/Desktop/openssl@3/*/lib` -L`echo ~/Desktop/json-c/*/lib` -L`echo ~/Desktop/libuv/*/lib` src/utils.c src/pty.c src/protocol.c src/http.c src/server.c  -luv -lwebsockets -ljson-c -lcrypto -lz -lssl -o ttyd
+mkdir lib; cp ~/Desktop/**/libevent-* lib;
+otool -L ttyd lib/*|grep @|awk '{print $1}'|while read i; do cp -n ~/Desktop/**/${i##*/} lib; done
 p(){ l=(); for f in $~1; do [ ! -L $f ] && otool -L $f|sed 1,`otool -D $f|awk 'END{print NR}'`d|grep "$2"|awk '{print $1}'|while read i;do j=$3/${i##*/}; echo $f $i $j; install_name_tool -change $i $j $f; l+=($f); done; done; codesign -f -s - ${(u)l} }
-p ttyd @@ @executable_path/lib
+p ttyd @ @executable_path/lib
 p "lib/*" @@ @loader_path
 
 # update src/html.h

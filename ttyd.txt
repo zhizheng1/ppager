@@ -17,4 +17,5 @@ echo 'unsigned char index_html[] = {' >src/html.h
 ~/Library/Python/bin/python3 -c "print(','.join([hex(a) for a in open('index.html.gz','rb').read()]))" >>src/html.h
 echo '};\nunsigned int index_html_len = '$s1';\nunsigned int index_html_size = '$s';' >>src/html.h
 
+sudo apt install libjson-c-dev libwebsockets-dev
 gcc -I/usr/include/json-c src/utils.c src/pty.c src/protocol.c src/http.c src/server.c  -luv -lwebsockets -ljson-c -lcrypto -lz -lssl -Wl,-rpath=\$ORIGIN/lib,--disable-new-dtags -o ttyd

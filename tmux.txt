@@ -1,0 +1,11 @@
+[tmux]
+https://github.com/tmux/tmux
+
+curl -L "https://formulae.brew.sh/api/bottle/tmux.json"|sed -e 's|"ventura":{"url":"|\n|g' -e 's|"},"monterey":|\n|g'|grep ^http|while read i; do curl -H 'Authorization: Bearer QQ==' -L "$i" >a; tar zxvf a; done
+export CFLAGS="-I`echo ~/Desktop/libevent/*/include` -I`echo ~/Desktop/utf8proc/*/include`"
+export LDFLAGS="-L`echo ~/Desktop/libevent/*/lib` -L`echo ~/Desktop/utf8proc/*/lib`"
+./configure --enable-utf8proc
+otool -L tmux|grep @@|awk '{print $1}'|while read i; do cp -n ~/Desktop/**/${i##*/} lib; install_name_tool -change $i @executable_path/lib/${i##*/} tmux; done; codesign -f -s - tmux
+
+sudo apt install libevent-dev
+./configure --with-TERM=screen

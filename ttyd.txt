@@ -25,5 +25,8 @@ gcc -I/usr/include/json-c src/utils.c src/pty.c src/protocol.c src/http.c src/se
 
 [ttyd_zsh]
 ZDOTDIR=~/Applications/Utilities/ttyd_zsh; rm -rf $ZDOTDIR; mkdir $ZDOTDIR; [ -f ~/.zshrc ] && cp ~/.zshrc $ZDOTDIR
-echo export VISUAL=vi >>$ZDOTDIR/.zshrc
-echo '(ZDOTDIR=~/Applications/Utilities/ttyd_zsh ~/Applications/Utilities/ttyd -i lo0 zsh&)' >$ZDOTDIR/start
+echo unset TERM_PROGRAM TERM_PROGRAM_VERSION >$ZDOTDIR/start
+echo export VISUAL=vi >>$ZDOTDIR/start
+echo export ZDOTDIR=~/Applications/Utilities/ttyd_zsh >>$ZDOTDIR/start
+echo cd >>$ZDOTDIR/start
+echo '(~/Applications/Utilities/ttyd -i lo0 zsh&)' >>$ZDOTDIR/start

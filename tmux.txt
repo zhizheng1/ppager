@@ -10,7 +10,7 @@ mkdir lib; otool -L tmux|grep @@|awk '{print $1}'|while read i; do cp -n ~/Deskt
 sudo apt install libevent-dev
 ./configure --with-TERM=screen
 
-echo alias tmux=~/Applications/Utilities/tmux >>$ZDOTDIR/.zshrc
 cat tmux-*/example_tmux.conf|sed 59,72d >~/.tmux.conf
 curl -LO https://invisible-island.net/datafiles/current/terminfo.src.gz && gunzip terminfo.src.gz
 tic -xe tmux-256color terminfo.src
+echo alias tmux=~/Applications/Utilities/tmux >>~/.zshrc

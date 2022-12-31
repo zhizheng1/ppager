@@ -22,12 +22,3 @@ echo '};\nunsigned int index_html_len = '$s1';\nunsigned int index_html_size = '
 
 sudo apt install libjson-c-dev libwebsockets-dev
 gcc -I/usr/include/json-c src/utils.c src/pty.c src/protocol.c src/http.c src/server.c  -luv -lwebsockets -ljson-c -lcrypto -lz -lssl -Wl,-rpath=\$ORIGIN/lib,--disable-new-dtags -o ttyd
-
-[ttyd_zsh]
-ZDOTDIR=~/Applications/Utilities/ttyd_zsh; rm -rf $ZDOTDIR; mkdir $ZDOTDIR
-echo '[ -f ~/.zshrc ] && . ~/.zshrc' >$ZDOTDIR/.zshrc
-echo unset TERM_PROGRAM TERM_PROGRAM_VERSION >$ZDOTDIR/start
-echo export VISUAL=vi >>$ZDOTDIR/start
-echo export ZDOTDIR=~/Applications/Utilities/ttyd_zsh >>$ZDOTDIR/start
-echo cd >>$ZDOTDIR/start
-echo '(~/Applications/Utilities/ttyd -i lo0 zsh&)' >>$ZDOTDIR/start

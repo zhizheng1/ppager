@@ -14,7 +14,7 @@ p ttyd @ @executable_path/lib
 p "lib/*" @@ @loader_path
 
 # update src/html.h
-curl "http://localhost:7681"|sed -e 's|theme:{fo[a-zA-Z0-9,":#]*}|theme:{foreground:"#000000",background:"#ffffff",cursor:"#7f7f7f",selectionBackground:"#a5cdff",selectionInactiveBackground:"#e0e0e0",black:"#000000",red:"#990000",green:"#00a600",yellow:"#999900",blue:"#0000b2",magenta:"#b200b2",cyan:"#00a6b2",white:"#bfbfbf",brightBlack:"#666666",brightRed:"#e50000",brightGreen:"#00d900",brightYellow:"#e5e500",brightBlue:"#0000ff",brightMagenta:"#e500e5",brightCyan:"#00e5e5",brightWhite:"#e5e5e5"}|g' -e 's|fontSize:13|fontSize:11|g' -e 's|f0f0f0|e0e0e0|g' -e 's|n\.isMac?[a-zA-Z\.&_]*:||g' >index.html
+curl "http://localhost:7681"|sed -e 's|theme:{fo[a-zA-Z0-9,":#]*}|theme:{foreground:"#000000",background:"#ffffff",cursor:"#7f7f7f",selectionBackground:"#a5cdff",selectionInactiveBackground:"#e0e0e0",black:"#000000",red:"#990000",green:"#00a600",yellow:"#999900",blue:"#0000b2",magenta:"#b200b2",cyan:"#00a6b2",white:"#bfbfbf",brightBlack:"#666666",brightRed:"#e50000",brightGreen:"#00d900",brightYellow:"#e5e500",brightBlue:"#0000ff",brightMagenta:"#e500e5",brightCyan:"#00e5e5",brightWhite:"#e5e5e5"}|g' -e 's|fontSize:13|fontSize:11|g' -e 's|Consolas|ui-monospace,&|g' -e 's|f0f0f0|e0e0e0|g' -e 's|n\.isMac?[a-zA-Z\.&_]*:||g' >index.html
 s=`wc index.html|awk '{print $3}'`; gzip index.html; s1=`wc index.html.gz|awk '{print $3}'`
 echo 'unsigned char index_html[] = {' >src/html.h
 ~/Library/Python/bin/python3 -c "print(','.join([hex(a) for a in open('index.html.gz','rb').read()]))" >>src/html.h

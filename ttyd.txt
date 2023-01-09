@@ -19,6 +19,7 @@ s=`wc index.html|awk '{print $3}'`; gzip index.html; s1=`wc index.html.gz|awk '{
 echo 'unsigned char index_html[] = {' >src/html.h
 ~/Library/Python/bin/python3 -c "print(','.join([hex(a) for a in open('index.html.gz','rb').read()]))" >>src/html.h
 echo '};\nunsigned int index_html_len = '$s1';\nunsigned int index_html_size = '$s';' >>src/html.h
+sed -i.0 -e 19d -e 25d -e 's| (%s).*buffer);|", cmd, server->command);|g' src/protocol.c
 
 sudo apt install libjson-c-dev libwebsockets-dev
 gcc -I/usr/include/json-c src/utils.c src/pty.c src/protocol.c src/http.c src/server.c  -luv -lwebsockets -ljson-c -lcrypto -lz -lssl -Wl,-rpath=\$ORIGIN/lib,--disable-new-dtags -o ttyd
